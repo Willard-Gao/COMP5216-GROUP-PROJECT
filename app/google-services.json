@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1000874949843",
+    "project_id": "my-wardrobe-1b9d0",
+    "storage_bucket": "my-wardrobe-1b9d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000874949843:android:2046ae2efaafbf2ea1e826",
+        "android_client_info": {
+          "package_name": "comp5216.sydney.edu.au.groupproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000874949843-h87qkvjoqob9hao0s7qpuv1e507j2n3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEm2k9kHdRlrU6e98_aXNAqp2p9HQmO8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000874949843-h87qkvjoqob9hao0s7qpuv1e507j2n3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

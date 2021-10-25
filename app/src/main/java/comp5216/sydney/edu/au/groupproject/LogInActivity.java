@@ -1,11 +1,5 @@
 package comp5216.sydney.edu.au.groupproject;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +14,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -39,14 +39,11 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class LogInActivity extends AppCompatActivity {
 
     private Boolean isSignedIn = false;
     FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -323,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
 
     // click button for "user page"
     public void onUserActivityClick(View view) {
-        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        Intent intent = new Intent(LogInActivity.this, UserActivity.class);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         intent.putExtra("username", String.valueOf(user.getDisplayName()));
         // communicate with 2 views

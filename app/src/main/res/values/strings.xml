@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">group project</string>
+    <string name="facebook_application_id" translatable="false">371611371181534</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb371611371181534</string>
+    <string name="log_out">log out</string>
+    <string name="user_name">username</string>
+    <string name="user_pro">this is your user profile</string>
 </resources>
