@@ -1,7 +1,15 @@
 package comp5216.sydney.edu.au.groupproject;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,14 +20,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
@@ -34,21 +35,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LogInActivity extends AppCompatActivity {
 
     private Boolean isSignedIn = false;
     FirebaseStorage storage = FirebaseStorage.getInstance();
-    Long currentLevel = 0L;
-    Long uploadThreshold = 0L;
+    List<UploadTask> uploadQueue = new LinkedList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +71,7 @@ public class LogInActivity extends AppCompatActivity {
         // Start sign in if necessary
         if (shouldStartSignIn()) {
             startSignIn();
+            startUploadThread();
             return;
         }
     }
@@ -99,6 +100,56 @@ public class LogInActivity extends AppCompatActivity {
         signInLauncher.launch(signInIntent);
     }
 
+    public void startUploadThread() {
+        try {
+            new Thread() {
+                @Override
+                public void run() {
+                    StorageReference storageRef = storage.getReference();
+                    while (true) {
+                        while (!isWifiConnect()) {
+                            try {
+                                sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        Long startTime = System.currentTimeMillis();
+                        while (uploadQueue.size() <= 10) {
+                            Log.i("Current upload queue size = ", String.valueOf(uploadQueue.size()));
+                            Long currentTime = System.currentTimeMillis();
+                            if ((currentTime - startTime) / 1000 > 5 * 60) {
+                                break;
+                            }
+                        }
+                        for (UploadTask task : uploadQueue) {
+                            Uri fileUri = Uri.fromFile(task.getUploadFile());
+                            StorageReference fileRef;
+                            fileRef = storageRef.child( task.getUsername() + "/" + fileUri.getLastPathSegment());
+                            com.google.firebase.storage.UploadTask uploadTask = fileRef.putFile(fileUri);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception exception) {
+                                    Toast.makeText(LogInActivity.this, "Upload file " +
+                                            task.getUploadFile().getAbsolutePath() + " Failed, " +
+                                            exception.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<com.google.firebase.storage.UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(com.google.firebase.storage.UploadTask.TaskSnapshot taskSnapshot) {
+                                    Toast.makeText(LogInActivity.this, "Upload file " +
+                                            task.getUploadFile().getAbsolutePath() + " Success", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                }
+            }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
@@ -112,16 +163,14 @@ public class LogInActivity extends AppCompatActivity {
                     "Log in success, username: " + username,
                     Toast.LENGTH_SHORT).show();
             // set up username
-            TextView textview = (TextView) findViewById(R.id.username);
-            textview.setText(username);
+
             // ...
         } else {
-            if (response != null){
+            if (response != null) {
                 Toast.makeText(getApplicationContext(),
                         "Log in failed, error message: " + response.getError(),
                         Toast.LENGTH_LONG).show();
-            }
-            else{
+            } else {
                 Toast.makeText(getApplicationContext(),
                         "User stopped logging in", Toast.LENGTH_SHORT).show();
                 startSignIn();
@@ -148,8 +197,6 @@ public class LogInActivity extends AppCompatActivity {
     }
 
 
-
-
     public void onDeleteAccount(View view) {
         AuthUI.getInstance()
                 .delete(this)
@@ -170,6 +217,7 @@ public class LogInActivity extends AppCompatActivity {
         String mediaPath = filename;
         createInstagramIntent(type, mediaPath);
     }
+
     private void createInstagramIntent(String type, String mediaPath) {
         // Create the new Intent using the 'Send' action.
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -196,70 +244,6 @@ public class LogInActivity extends AppCompatActivity {
                 });
     }
 
-
-    public void doUploadTask(int type) {
-        List tmpFileList = new ArrayList();
-        try {
-            new Thread() {
-                @Override
-                public void run() {
-                    File imgDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).
-                            getAbsolutePath() + File.separator + "images");
-                    File[] imgFiles = imgDir.listFiles();
-                    StorageReference listRef = storage.getReference().child("images");
-                    Long start = System.currentTimeMillis();
-                    Long finalStart = start;
-                    listRef.listAll()
-                            .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                                @Override
-                                public void onSuccess(ListResult listResult) {
-                                    for (StorageReference item : listResult.getItems()) {
-                                        tmpFileList.add(item.getName());
-                                    }
-                                    Long end = System.currentTimeMillis();
-                                    System.out.println("list bucket files, time spent " + (end - finalStart) + " ms");
-
-                                    if (type == 0) {
-                                        while (!isWifiConnect()) {
-                                            try {
-                                                sleep(2000);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-
-                                    for (File tmp : imgFiles) {
-                                        if (tmpFileList.contains(tmp.getName())) {
-                                            continue;
-                                        }
-                                        while (currentLevel > uploadThreshold) {
-                                            try {
-                                                System.out.println( String.format("current traffic %s is bigger than " +
-                                                        "upload threshold %s, wait a moment", currentLevel, uploadThreshold));
-                                                sleep(2000);
-                                            } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                        upLoadByUser(tmp);
-                                    }
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                }
-                            });
-                    super.run();
-                }
-            }.start();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public boolean isWifiConnect() {
         ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifiInfo = connManager.getActiveNetworkInfo();
@@ -269,39 +253,7 @@ public class LogInActivity extends AppCompatActivity {
         return false;
     }
 
-    public void upLoadByUser(File uploadFile) {
-        try {
-            StorageReference storageRef = storage.getReference();
-            Uri fileUri = Uri.fromFile(uploadFile);
-            StorageReference fileRef;
-            fileRef = storageRef.child("images/" + fileUri.getLastPathSegment());
-            UploadTask uploadTask = null;
-            try {
-                uploadTask = fileRef.putStream(new FileInputStream(uploadFile));
-                currentLevel += uploadFile.length();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    currentLevel -= uploadFile.length();
-                    Toast.makeText(getApplicationContext(), "Upload file " +
-                            uploadFile.getAbsolutePath() + " Failed, " +
-                            exception.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    currentLevel -= uploadFile.length();
-                    System.out.println("current traffic : " + currentLevel);
-                }
-            });
-        } catch (Exception e) {
-            currentLevel -= uploadFile.length();
-            e.printStackTrace();
-        }
-    }
+
 
     ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -309,8 +261,8 @@ public class LogInActivity extends AppCompatActivity {
                 if (result.getResultCode() == RESULT_OK) {
                     // Extract name value from result
                     Log.i("TEST", String.valueOf(R.string.log_out));
-                    Boolean flag = result.getData().getExtras().getBoolean("R.string.log_out");
-                    if (flag){
+                    Boolean flag = result.getData().getExtras().getBoolean("logout");
+                    if (flag) {
                         Log.i("USER", "log out");
                         signedOut();
                     }
@@ -328,4 +280,19 @@ public class LogInActivity extends AppCompatActivity {
             mLauncher.launch(intent);
         }
     }
+
+
+    public void addIntoQueue(File uploadFile, String username) {
+        synchronized (uploadQueue) {
+            UploadTask uploadTask = new UploadTask();
+            uploadTask.setUploadFile(uploadFile);
+            uploadTask.setUsername(username);
+            uploadQueue.add(uploadTask);
+        }
+    }
+
+//    public long getKB(){
+//        getApplicationInfo();
+//        return TrafficStats.getUidRxBytes(uid) == TrafficStats.UNSUPPORTED ? 0 : (TrafficStats.getTotalRxBytes() / 1024);
+//    }
 }

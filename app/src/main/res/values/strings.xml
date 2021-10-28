@@ -3,6 +3,15 @@
     <string name="facebook_application_id" translatable="false">371611371181534</string>
     <string name="facebook_login_protocol_scheme" translatable="false">fb371611371181534</string>
     <string name="log_out">log out</string>
+    <string name="upload">upload</string>
     <string name="user_name">username</string>
+    <string name ="our_email">jgao8123@uni.sydney.edu.au</string>
+    <string name ="our_website">https://github.com/Willard-Gao/COMP5216-GROUP-PROJECT/tree/master/app/src/main</string>
     <string name="user_pro">this is your user profile</string>
+    <string name="dialog_wifi_title">Sync Alert?</string>
+    <string name="dialog_wifi_msg">You are not connected to WiFi. Would you like to proceed?</string>
+    <string name="dialog_cancel_msg">Are you sure to cancel this edit?
+        Your unsaved edit will be discarded if you click YES</string>
+    <string name="PROCEED">YES</string>
+    <string name="STOP">NO</string>
 </resources>

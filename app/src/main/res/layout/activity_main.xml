@@ -8,20 +8,12 @@
 
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onDeleteAccount"
-        android:text="delete"
-        />
-
-    <Button
         android:id="@+id/button4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="OnShare"
         android:text="Share"
-        android:layout_below="@+id/button3"/>
+        />
 
     <Button
         android:id="@+id/button5"
