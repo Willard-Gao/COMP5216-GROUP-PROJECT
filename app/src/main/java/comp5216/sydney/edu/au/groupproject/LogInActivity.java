@@ -68,10 +68,10 @@ public class LogInActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
+        startUploadThread();
         // Start sign in if necessary
         if (shouldStartSignIn()) {
             startSignIn();
-            startUploadThread();
             return;
         }
     }
