@@ -5,10 +5,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -16,8 +21,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,15 +43,20 @@ import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     Long currentLevel = 0L;
     Long uploadThreshold = 0L;
+
+    public String photoFileName = "photo.jpg";
+    private static final int MY_PERMISSIONS_REQUEST_OPEN_CAMERA = 101;
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHOTOS = 102;
+    public final int TAKE_PHOTO_CODE = 648;
+    private Bitmap bitmap;
+    File file;
+    Button button;
+
+    MarshmallowPermission marshmallowPermission = new MarshmallowPermission(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +83,16 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        button = findViewById(R.id.button12);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, CameraActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public Boolean shouldStartSignIn() {
@@ -119,12 +151,11 @@ public class MainActivity extends AppCompatActivity {
             textview.setText(username);
             // ...
         } else {
-            if (response != null){
+            if (response != null) {
                 Toast.makeText(getApplicationContext(),
                         "Log in failed, error message: " + response.getError(),
                         Toast.LENGTH_LONG).show();
-            }
-            else{
+            } else {
                 Toast.makeText(getApplicationContext(),
                         "User stopped logging in", Toast.LENGTH_SHORT).show();
                 startSignIn();
@@ -151,8 +182,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public void onDeleteAccount(View view) {
         AuthUI.getInstance()
                 .delete(this)
@@ -173,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         String mediaPath = filename;
         createInstagramIntent(type, mediaPath);
     }
+
     private void createInstagramIntent(String type, String mediaPath) {
         // Create the new Intent using the 'Send' action.
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -238,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         while (currentLevel > uploadThreshold) {
                                             try {
-                                                System.out.println( String.format("current traffic %s is bigger than " +
+                                                System.out.println(String.format("current traffic %s is bigger than " +
                                                         "upload threshold %s, wait a moment", currentLevel, uploadThreshold));
                                                 sleep(2000);
                                             } catch (InterruptedException e) {
@@ -313,7 +343,7 @@ public class MainActivity extends AppCompatActivity {
                     // Extract name value from result
                     Log.i("TEST", String.valueOf(R.string.log_out));
                     Boolean flag = result.getData().getExtras().getBoolean("R.string.log_out");
-                    if (flag){
+                    if (flag) {
                         Log.i("USER", "log out");
                         signedOut();
                     }
@@ -331,4 +361,23 @@ public class MainActivity extends AppCompatActivity {
             mLauncher.launch(intent);
         }
     }
+
+
+    public void onTakePhotoClick(View view) {
+        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+//
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//            startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
+//            (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//        }
+
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Uri photoUri = Uri.fromFile(new File("/"));
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//        startActivityForResult(intent, 648);
+    }
+
+
+
 }
