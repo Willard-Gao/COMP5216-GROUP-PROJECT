@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="seasonArray">
+        <item>Spring</item>
+        <item>Summer</item>
+        <item>Autumn</item>
+        <item>Winter</item>
+    </string-array>
+    <string-array name="classificationArray">
+        <item>Hats</item>
+        <item>Tops</item>
+        <item>Bottoms</item>
+        <item>Shoes</item>
+        <item>Accessories</item>
+    </string-array>
+</resources>

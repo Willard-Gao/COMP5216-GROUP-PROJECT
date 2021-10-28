@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/typeName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="Upper Clothes"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/lower_clothes"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/upper_clothes_grid"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:text="Lower Clothes"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/dress"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/lower_clothes_grid"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:text="Hats"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/shoes"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/dress_clothes_grid"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:text="Shoes"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/accessories"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@+id/shoes_clothes_grid"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:text="Accessories"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textStyle="bold" />-->
+
+    <HorizontalScrollView
+        android:id="@+id/upper_clothes_grid"
+        android:layout_width="406dp"
+        android:layout_height="143dp"
+        android:layout_below="@id/typeName"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="10dp">
+
+            <GridView
+                android:id="@+id/grid"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:numColumns="auto_fit"
+                android:stretchMode="spacingWidthUniform"></GridView>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+
+
+</RelativeLayout>
