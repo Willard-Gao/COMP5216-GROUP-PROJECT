@@ -21,7 +21,7 @@
         android:onClick="onWaedrobeClick"
         android:layout_width="42dp"
         android:layout_height="35dp"
-        android:layout_marginStart="51dp"
+        android:layout_marginStart="35dp"
         android:src="@drawable/armoire"
         app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:onClick="onSearchClick"
         android:layout_width="42dp"
         android:layout_height="35dp"
-        android:layout_marginStart="51dp"
+        android:layout_marginStart="35dp"
         android:src="@drawable/search"
         app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
@@ -41,14 +41,26 @@
         app:layout_constraintVertical_bias="0.252"/>
 
     <ImageView
+        android:id="@+id/imageView11"
+        android:onClick="onCameraClick"
+        android:layout_width="42dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="35dp"
+        android:src="@drawable/photo"
+        app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
+        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintTop_toTopOf="@+id/bottomAppBar"
+        app:layout_constraintVertical_bias="0.352" />
+
+    <ImageView
         android:id="@+id/imageView3"
         android:onClick="onStyleClick"
         android:layout_width="42dp"
         android:layout_height="35dp"
-        android:layout_marginStart="51dp"
+        android:layout_marginStart="35dp"
         android:src="@drawable/style"
         app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
-        app:layout_constraintStart_toEndOf="@+id/imageView10"
+        app:layout_constraintStart_toEndOf="@+id/imageView11"
         app:layout_constraintTop_toTopOf="@+id/bottomAppBar"
         app:layout_constraintVertical_bias="0.352" />
 
@@ -57,7 +69,7 @@
         android:onClick="onUserClick"
         android:layout_width="42dp"
         android:layout_height="35dp"
-        android:layout_marginStart="51dp"
+        android:layout_marginStart="35dp"
         android:layout_marginTop="12dp"
         android:src="@drawable/user_icon"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,7 +81,7 @@
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
+        android:layout_marginStart="20dp"
         android:text="my waedrobe"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
@@ -82,7 +94,7 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="25dp"
         android:text="search"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
@@ -90,21 +102,32 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/textView14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:text="style"
+        android:layout_marginStart="35dp"
+        android:text="camera"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
     <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:text="style"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/textView14"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="52dp"
         android:text="user"
         android:textColor="#FFFFFF"
         android:textSize="12sp"

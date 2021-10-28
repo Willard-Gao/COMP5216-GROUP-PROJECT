@@ -75,11 +75,11 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.list);
 
 
-        wardrobe.put("Hats", new LinkedList<File>());
-        wardrobe.put("Tops", new LinkedList<File>());
-        wardrobe.put("Bottoms", new LinkedList<File>());
-        wardrobe.put("Shoes", new LinkedList<File>());
-        wardrobe.put("Accessories", new LinkedList<File>());
+        wardrobe.put("Hats", new LinkedList<>());
+        wardrobe.put("Tops", new LinkedList<>());
+        wardrobe.put("Bottoms", new LinkedList<>());
+        wardrobe.put("Shoes", new LinkedList<>());
+        wardrobe.put("Accessories", new LinkedList<>());
 
 
         // 文件分类
