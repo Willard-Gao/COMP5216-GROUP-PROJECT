@@ -46,6 +46,8 @@ public class UserActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         String username = getIntent().getStringExtra("username");
+        textView = findViewById(R.id.username);
+        textView.setText(username);
         findViewById(R.id.aboutus).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,8 +70,7 @@ public class UserActivity extends Activity {
         });
         findViewById(R.id.userpro).setVisibility(View.VISIBLE);
 
-        textView = findViewById(R.id.username);
-        textView.setText("username");
+
     }
 
 

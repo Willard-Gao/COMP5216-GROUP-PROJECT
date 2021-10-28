@@ -23,7 +23,7 @@
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/username1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"

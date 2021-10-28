@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         // 文件分类
-        File mediaStorageDirImage = new File(Environment.getExternalStorageDirectory().toString()
-                + File.separator + "mediaImage");
+        File mediaStorageDirImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                + File.separator + "project");
         if (mediaStorageDirImage.exists()) {
             findAllImage(mediaStorageDirImage);
         } else {
@@ -184,8 +184,8 @@ public class MainActivity extends AppCompatActivity {
                     "Log in success, username: " + username,
                     Toast.LENGTH_SHORT).show();
             // set up username
-            TextView textview = (TextView) findViewById(R.id.username);
-            textview.setText(username);
+//            TextView textview = (TextView) findViewById(R.id.username);
+//            textview.setText(username);
             // ...
         } else {
             if (response != null){
@@ -400,6 +400,21 @@ public class MainActivity extends AppCompatActivity {
             mLauncher.launch(intent);
         }
     }
+
+    public void onSearchClick(View view) {
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void onCameraClick(View view) {
+        Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+
+
 
     class WardrobeAdapter extends ArrayAdapter<Type> {
         public WardrobeAdapter(Context context, ArrayList<Type> itemList) {

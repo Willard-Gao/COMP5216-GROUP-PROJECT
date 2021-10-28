@@ -76,6 +76,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/classification"
         android:layout_marginTop="10dp"
-        android:numColumns="3"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:numColumns="3" />
+
+    <include
+        android:id="@+id/include_search"
+        layout="@layout/nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

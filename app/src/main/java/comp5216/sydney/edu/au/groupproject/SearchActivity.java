@@ -1,6 +1,7 @@
 package comp5216.sydney.edu.au.groupproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +16,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,8 +46,8 @@ public class SearchActivity extends AppCompatActivity {
         classificationSpinner = findViewById(R.id.classification_spinner);
         gridView = findViewById(R.id.search_res);
 
-        File mediaStorageDirImage = new File(Environment.getExternalStorageDirectory().toString()
-                + File.separator + "mediaImage");
+        File mediaStorageDirImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                + File.separator + "project");
         if (mediaStorageDirImage.exists()) {
             findAllImage(mediaStorageDirImage);
         } else {
@@ -152,5 +156,29 @@ public class SearchActivity extends AppCompatActivity {
 //            imageView.setPadding(8, 8, 8, 8);
             return view;
         }
+    }
+
+//    // click button for "user page"
+//    public void onUserClick(View view) {
+//        Intent intent = new Intent(SearchActivity.this, UserActivity.class);
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        intent.putExtra("username", String.valueOf(user.getDisplayName()));
+//        // communicate with 2 views
+//        if (intent != null) {
+//            mLauncher.launch(intent);
+//        }
+//    }
+
+
+    public void onWaedrobeClick(View view) {
+        Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+        finish();
+        startActivity(intent);
+    }
+
+    public void onCameraClick(View view) {
+        Intent intent = new Intent(SearchActivity.this, CameraActivity.class);
+        finish();
+        startActivity(intent);
     }
 }
